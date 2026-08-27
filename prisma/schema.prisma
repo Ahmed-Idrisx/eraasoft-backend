@@ -1,0 +1,140 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  firstName String
+  lastName  String
+  email     String   @unique
+  password  String
+  phone     String?
+  bio       String?
+  avatar    String?
+
+  isVerified Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  otps Otp[]
+}
+
+enum OtpType {
+  EMAIL_VERIFICATION
+  PASSWORD_RESET
+}
+
+model Otp {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  codeHash  String
+  type      OtpType
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, type])
+}
+
+model Course {
+  id                         Int      @id @default(autoincrement())
+  title                      String
+  slug                       String   @unique
+  image                      String
+  backgroundImage            String
+  description                String
+  whatWillLearn              String[]
+  practicalAssignmentsNumber Int
+  courseProjectsNumber       Int
+  price                      Decimal  @db.Decimal(10, 2)
+  discount                   Decimal  @db.Decimal(10, 2)
+  finalPrice                 Decimal  @db.Decimal(10, 2)
+  weeksNumber                Int
+  hoursNumber                Int
+  rating                     Decimal  @db.Decimal(2, 1)
+  reviewsCount               Int      @default(0)
+  features                   String[]
+  content                    Json
+  testimonials               Json
+  relatedCourses             Json
+  category                   String
+  createdAt                  DateTime @default(now())
+  updatedAt                  DateTime @updatedAt
+
+  @@index([category])
+}
+
+model Article {
+  id          Int      @id @default(autoincrement())
+  title       String
+  slug        String   @unique
+  image       String
+  excerpt     String
+  content     String
+  publishedAt DateTime
+  views       Int      @default(0)
+  author      String
+  categories  String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([publishedAt])
+}
+
+model Faq {
+  id        Int      @id @default(autoincrement())
+  question  String   @unique
+  answer    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Feature {
+  id          Int      @id @default(autoincrement())
+  title       String   @unique
+  description String
+  icon        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model JourneyStep {
+  id          Int      @id @default(autoincrement())
+  title       String   @unique
+  description String
+  icon        String
+  points      String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Partner {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  image     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model FreeCourse {
+  id               Int      @id @default(autoincrement())
+  title            String
+  slug             String   @unique
+  shortDescription String
+  description      String
+  image            String
+  backgroundImage  String
+  isFeatured       Boolean  @default(false)
+  videosCount      Int      @default(0)
+  isFree           Boolean  @default(true)
+  videos           Json
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
