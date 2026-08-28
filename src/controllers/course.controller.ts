@@ -16,6 +16,7 @@ export async function getCourses(req: Request, res: Response) {
         slug: true,
         description: true,
         image: true,
+        category: true,
         practicalAssignmentsNumber: true,
         courseProjectsNumber: true,
         weeksNumber: true,
