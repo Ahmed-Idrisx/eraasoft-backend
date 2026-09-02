@@ -4,6 +4,7 @@ import cors from "cors";
 import authRoutes from "./routes/auth.routes";
 import articleRoutes from "./routes/article.routes";
 import courseRoutes from "./routes/course.routes";
+import enrollmentRoutes from "./routes/enrollment.routes";
 import faqRoutes from "./routes/faq.routes";
 import featureRoutes from "./routes/feature.routes";
 import freeCourseRoutes from "./routes/free-course.routes";
@@ -11,6 +12,8 @@ import journeyRoutes from "./routes/journey.routes";
 import partnerRoutes from "./routes/partner.routes";
 import userRoutes from "./routes/user.routes";
 import { globalErrorHandler, notFound } from "./middleware/error.middleware";
+import reviewRoutes from "./routes/review.routes";
+import contactRoutes from "./routes/contact.routes";
 
 const app = express();
 
@@ -28,11 +31,14 @@ app.use("/api/auth", authRoutes);
 // Public data
 app.use("/api/articles", articleRoutes);
 app.use("/api/courses", courseRoutes);
+app.use("/api/enrollments", enrollmentRoutes);
+app.use("/api/reviews", reviewRoutes);
 app.use("/api/faqs", faqRoutes);
 app.use("/api/features", featureRoutes);
 app.use("/api/free-courses", freeCourseRoutes);
 app.use("/api/journey", journeyRoutes);
 app.use("/api/partners", partnerRoutes);
+app.use("/api/contact", contactRoutes);
 
 // Users
 app.use("/api/users", userRoutes);
@@ -43,4 +49,9 @@ app.use(notFound);
 // Global error handler
 app.use(globalErrorHandler);
 
-export default app;
+// export default app;
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
